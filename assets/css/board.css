@@ -1,0 +1,22 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.board {
+    margin-left: auto;
+    margin-right: auto;
+    cursor: none;
+    border: 1px solid midnightblue;
+}
+
+.pixel {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+}
+
+.pixel:hover {
+    border: 1px solid midnightblue;
+    filter: brightness(90%);
+}

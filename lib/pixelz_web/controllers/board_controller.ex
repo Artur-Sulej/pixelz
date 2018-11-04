@@ -1,4 +1,4 @@
-defmodule PixelzWeb.PageController do
+defmodule PixelzWeb.BoardController do
   use PixelzWeb, :controller
 
   def index(conn, _params) do

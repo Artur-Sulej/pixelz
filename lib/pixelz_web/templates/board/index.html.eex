@@ -1,0 +1,13 @@
+<div>
+  <table class="board" cellspacing="0">
+    <%= (0..99) |> Enum.map(fn _ -> %>
+      <tr>
+        <%= (0..99) |> Enum.map(fn _ -> %>
+          <td>
+            <div class="pixel"></div>
+          </td>
+        <% end) %>
+      </tr>
+    <% end) %>
+  </table>
+</div>
