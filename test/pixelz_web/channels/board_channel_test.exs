@@ -16,9 +16,9 @@ defmodule PixelzWeb.BoardChannelTest do
     assert_reply ref, :ok, %{"hello" => "there"}
   end
 
-  test "shout broadcasts to board:lobby", %{socket: socket} do
-    push socket, "shout", %{"hello" => "all"}
-    assert_broadcast "shout", %{"hello" => "all"}
+  test "paint_pixel broadcasts to board:lobby", %{socket: socket} do
+    push socket, "paint_pixel", %{"hello" => "all"}
+    assert_broadcast "paint_pixel", %{"hello" => "all"}
   end
 
   test "broadcasts are pushed to the client", %{socket: socket} do

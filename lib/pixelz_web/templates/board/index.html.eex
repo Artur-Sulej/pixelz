@@ -1,10 +1,10 @@
 <div>
   <table class="board" cellspacing="0">
-    <%= (0..99) |> Enum.map(fn _ -> %>
+    <%= (0..99) |> Enum.map(fn y -> %>
       <tr>
-        <%= (0..99) |> Enum.map(fn _ -> %>
+        <%= (0..99) |> Enum.map(fn x -> %>
           <td>
-            <div class="pixel"></div>
+            <div data-xcoord=<%=x%> data-ycoord=<%=y%> class="pixel"></div>
           </td>
         <% end) %>
       </tr>

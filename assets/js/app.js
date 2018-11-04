@@ -1,35 +1,34 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
-
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
 import "phoenix_html"
-
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
-
+import $ from "jquery"
 import socket from "./socket"
 
+
+// Functions
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 16 ** 6).toString(16).padStart(6, "0")
+}
+
+function paint(x, y, color) {
+  const pixel = $(`[data-xcoord='${x}'][data-ycoord='${y}']`)
+  pixel.css("background-color", color)
+}
+
+
+// Channel handling
 let channel = socket.channel("board:lobby", {})
 
-channel.on("shout", function (payload) { // listen to the 'shout' event
-  console.log("Boom", payload)
-});
+channel.on("paint_pixel", function ({ x, y, color }) { // listen to the 'paint_pixel' event
+  paint(x, y, color)
+})
 
-channel.join(); // join the channel.
+channel.join()
 
-document.addEventListener("click", function (event) {
-  channel.push("shout", { // send the message to the server on "shout" channel
-    some_stuff: "trololol"
-  });
-});
+
+// Handle painting pixels
+$(document).ready(function () {
+  const color = getRandomColor()
+
+  $(".pixel").click(function ({ currentTarget: { dataset: { xcoord: x, ycoord: y } } }) {
+    channel.push("paint_pixel", { x, y, color })
+  })
+})
