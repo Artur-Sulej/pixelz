@@ -18,4 +18,18 @@ import "phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-// import socket from "./socket"
+import socket from "./socket"
+
+let channel = socket.channel("board:lobby", {})
+
+channel.on("shout", function (payload) { // listen to the 'shout' event
+  console.log("Boom", payload)
+});
+
+channel.join(); // join the channel.
+
+document.addEventListener("click", function (event) {
+  channel.push("shout", { // send the message to the server on "shout" channel
+    some_stuff: "trololol"
+  });
+});
