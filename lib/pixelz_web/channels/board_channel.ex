@@ -3,6 +3,7 @@ defmodule PixelzWeb.BoardChannel do
   alias Pixelz.{Pixel, Repo}
 
   def join("board:lobby", payload, socket) do
+    send(self(), :after_join)
     {:ok, socket}
   end
 
@@ -11,6 +12,12 @@ defmodule PixelzWeb.BoardChannel do
   def handle_in("paint_pixel", payload, socket) do
     upsert_pixel(payload)
     broadcast(socket, "paint_pixel", payload)
+    {:noreply, socket}
+  end
+
+  def handle_info(:after_join, socket) do
+    payload = %{pixels: fetch_pixels()} # Message must be a map
+    push(socket, "paint_pixels", payload)
     {:noreply, socket}
   end
 
@@ -28,5 +35,11 @@ defmodule PixelzWeb.BoardChannel do
         |> Pixel.changeset(%{"color" => color})
         |> Repo.update()
     end
+  end
+
+  defp fetch_pixels do
+    Pixel
+    |> Repo.all()
+    |> Enum.map(&Map.take(&1, [:x, :y, :color]))
   end
 end

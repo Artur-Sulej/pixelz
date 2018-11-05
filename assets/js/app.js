@@ -17,8 +17,14 @@ function paint(x, y, color) {
 // Channel handling
 let channel = socket.channel("board:lobby", {})
 
-channel.on("paint_pixel", function ({ x, y, color }) { // listen to the 'paint_pixel' event
+channel.on("paint_pixel", function ({ x, y, color }) {
   paint(x, y, color)
+})
+
+channel.on("paint_pixels", function ({ pixels }) {
+  pixels.forEach(function ({ x, y, color }) {
+    paint(x, y, color)
+  })
 })
 
 channel.join()
