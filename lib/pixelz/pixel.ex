@@ -6,11 +6,12 @@ defmodule Pixelz.Pixel do
     field(:x, :integer)
     field(:y, :integer)
     field(:color, :string)
+    field(:board_name, :string)
   end
 
   def changeset(pixel, attrs) do
     pixel
-    |> cast(attrs, ~w{x y color}a)
-    |> validate_required(~w{x y color}a)
+    |> cast(attrs, ~w{x y color board_name}a)
+    |> validate_required(~w{x y color board_name}a)
   end
 end

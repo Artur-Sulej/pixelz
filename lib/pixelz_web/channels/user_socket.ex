@@ -2,7 +2,7 @@ defmodule PixelzWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel("board:lobby", PixelzWeb.BoardChannel)
+  channel("board:*", PixelzWeb.BoardChannel)
 
   ## Transports
   transport(:websocket, Phoenix.Transports.WebSocket)

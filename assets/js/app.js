@@ -13,9 +13,13 @@ function paint(x, y, color) {
   pixel.css("background-color", color)
 }
 
+function get_board_name() {
+  return window.location.pathname.replace(/\/boards\/|\//g, "")
+}
+
 
 // Channel handling
-let channel = socket.channel("board:lobby", {})
+let channel = socket.channel(`board:${get_board_name()}`, {})
 
 channel.on("paint_pixel", function ({ x, y, color }) {
   paint(x, y, color)
