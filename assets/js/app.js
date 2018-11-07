@@ -32,6 +32,8 @@ channel.on("paint_pixels", function ({ pixels }) {
 })
 
 channel.join()
+  .receive("ok", resp => console.log("joined the board channel", resp))
+  .receive("error", reason => console.log("join failed", reason))
 
 
 // Handle painting pixels
@@ -40,5 +42,7 @@ $(document).ready(function () {
 
   $(".pixel").click(function ({ currentTarget: { dataset: { xcoord: x, ycoord: y } } }) {
     channel.push("paint_pixel", { x, y, color })
+      .receive("error", e => console.log(e))
+      .receive("ok", resp => console.log("paint_pixel response", resp))
   })
 })

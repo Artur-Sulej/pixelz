@@ -4,8 +4,12 @@ defmodule PixelzWeb.BoardChannel do
   import Ecto.Query
 
   def join("board:" <> board_name, payload, socket) do
-    send(self(), :after_join)
-    {:ok, assign(socket, :board_name, board_name)}
+    if authorized?(socket) do
+      send(self(), :after_join)
+      {:ok, assign(socket, :board_name, board_name)}
+    else
+      {:error, %{reason: "unauthorized"}}
+    end
   end
 
   # It is also common to receive messages from the client and
@@ -13,7 +17,7 @@ defmodule PixelzWeb.BoardChannel do
   def handle_in("paint_pixel", payload, socket) do
     upsert_pixel(payload, socket.assigns.board_name)
     broadcast(socket, "paint_pixel", payload)
-    {:noreply, socket}
+    {:reply, {:ok, %{some_response: "cauliflower"}}, socket}
   end
 
   def handle_info(:after_join, socket) do
@@ -22,13 +26,20 @@ defmodule PixelzWeb.BoardChannel do
     {:noreply, socket}
   end
 
-  defp upsert_pixel(payload = %{"x" => x, "y" => y, "color" => color}, board_name) do
+  # Add authorization logic here as required.
+  defp authorized?(socket) do
+    socket.assigns.user_id == 1337
+  end
+
+  defp upsert_pixel(%{"x" => x, "y" => y, "color" => color}, board_name) do
     pixel = Repo.get_by(Pixel, x: x, y: y, board_name: board_name)
 
     case pixel do
       nil ->
         %Pixel{}
-        |> Pixel.changeset(Map.put(payload, "board_name", board_name))
+        |> Pixel.changeset(
+          Map.put(%{"x" => x, "y" => y, "color" => color}, "board_name", board_name)
+        )
         |> Repo.insert()
 
       pixel ->
