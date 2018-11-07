@@ -1,5 +1,12 @@
 # Pixelz
 
+This drawing app demonstrates how to setup and use websockets with Elixir Phoenix.
+
+It was prepared for a coding session during the first Warsaw.ex meetup:
+https://www.meetup.com/warsaw-ex/events/255812156
+
+## How to?
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
